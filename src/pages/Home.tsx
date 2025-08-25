@@ -24,7 +24,7 @@ const Home = () => {
           className="max-w-3xl text-center"
         >
           <h1 className="text-4xl md:text-6xl font-semibold tracking-tight text-foreground mb-4">
-            <ScrambleText text="Howdy,I’m " className="inline-block mr-2" durationMs={1000} />
+            <ScrambleText text="Hello,I’m " className="inline-block mr-2" durationMs={1000} />
             <ScrambleText text={siteConfig.name} className="inline-block" durationMs={1000} />
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground mb-6">
