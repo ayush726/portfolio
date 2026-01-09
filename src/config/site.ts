@@ -4,7 +4,16 @@ export type Blog = {
   date: string; // ISO string
   excerpt: string;
   content: string;
-  attachments?: { src: string; alt?: string }[];
+  attachments?: { src: string; alt?: string }[] | null;
+};
+
+// Dynamically load all blog JSON files from the content/blogs folder
+const blogModules = import.meta.glob<Blog>('@/content/blogs/*.json', { eager: true });
+
+// Convert the imported modules to an array of blogs
+const loadBlogs = (): Blog[] => {
+  return Object.values(blogModules)
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()); // Sort by date, newest first
 };
 
 export const siteConfig = {
@@ -19,30 +28,8 @@ export const siteConfig = {
     instagram: "https://www.instagram.com/_ayush_x0/",
     facebook: "https://www.facebook.com/profile.php?id=100023345181272",
     github: "https://github.com/ayush726",
+    bluesky: "https://bsky.app/profile/ayush28.bsky.social",
+    behance: "https://www.behance.net/astacidayush",
   },
-  blogs: [
-    {
-      slug: "the-intern",
-      title: "First Internship",
-      date: "2025-01-01",
-      excerpt:
-        "A small detail about my first internship experience",
-      content:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n\nUt enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.\n\nExcepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-
-      // attachments: [
-      //   { src: "/icon.jpg", alt: "Sample attachment" },
-      //   { src: "/journey/2025/photo-1.jpg", alt: "Talk at meetup" },
-      // ],
-    },
-    {
-      slug: "the-college",
-      title: "Four years of college",
-      date: "2025-01-01",
-      excerpt:
-        "A small detail about my first internship experience",
-      content:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n\nUt enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.\n\nExcepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    },
-  ] as Blog[],
+  blogs: loadBlogs(),
 };

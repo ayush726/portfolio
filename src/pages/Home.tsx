@@ -28,7 +28,7 @@ const Home = () => {
             <ScrambleText text={siteConfig.name} className="inline-block" durationMs={1000} />
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground mb-6">
-            <ScrambleText text="turning Coffee ☕, Code 💻, and Curiosity 🔍 into cool creations." className="inline-block" durationMs={1200} />
+            <ScrambleText text="turning Coffee ☕, Code 💻, and Curiosity 🔍 into cool creations with creativity." className="inline-block" durationMs={1200} />
           </p>
           <p className="text-base md:text-lg text-muted-foreground mb-10 text-justify">
             {siteConfig.bio}
