@@ -12,7 +12,7 @@ const Blogs = () => {
         <meta name="description" content={`Blog posts by ${siteConfig.name}`} />
         <link rel="canonical" href={`${siteConfig.baseUrl}/blogs`} />
       </Helmet>
-      <main className="container mx-auto py-12">
+      <main className="container mx-auto py-12 relative z-10">
         <div className="mb-4">
           <h1 className="text-3xl md:text-4xl font-semibold tracking-tight text-foreground">Blogs</h1>
         </div>

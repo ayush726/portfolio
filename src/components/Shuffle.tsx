@@ -1,0 +1,502 @@
+import React, { useRef, useEffect, useState, useMemo } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+// import { SplitText as GSAPSplitText } from 'gsap/SplitText'; // NOTE: SplitText is a Club GSAP plugin (paid). We'll try to use a basic split approach or check if user has access. 
+// Assuming user might NOT have the paid SplitText plugin, functionality might break. 
+// However, the provided code explicitly imports it. If the user provided this code, they might expect it to work or have the file.
+// Wait, standard GSAP package does not include SplitText. It's a premium plugin.
+// Using the code as provided by the user. If it fails due to missing SplitText, I might need to mock it or ask for clarification.
+// For now, I will comment out the import if I can't find it, or use a workaround? 
+// Actually, let's paste the code exactly as requested. But wait, 'gsap/SplitText' won't work without the premium package installation or file.
+// If the user pasted this code, they likely copied it from somewhere like ReactBits.
+// Steps:
+// 1. Create file.
+// 2. Note that SplitText is premium. The user might get an error if they don't have the club gsap package installed/configured.
+// I will proceed with writing the file. If build fails, I'll let the user know.
+
+// Re-reading the user prompt code...
+// "import { SplitText as GSAPSplitText } from 'gsap/SplitText';"
+// This line definitely requires Club GSAP. 
+
+// Workaround: I can't easily "mock" SplitText behavior for shuffle effect perfectly without a library or complex code.
+// However, I will implement exactly what the user asked for first.
+
+import { useGSAP } from '@gsap/react';
+import { JSX } from 'react';
+
+// NOTE: SplitText is a premium plugin. If this import fails, the component will break.
+// I'll assume the environment might have it or I should try to simulate it if possible? 
+// No, I should stick to the user's request. But standard `npm install gsap` DOES NOT include SplitText.
+// This is a common pitfall. The user provided code from a specific library (ReactBits) which often relies on premium plugins or specific implementations.
+// Let's modify the code slightly to NOT crash if SplitText is missing, or try to use a basic split if possible?
+// Actually, looking at the code, it relies HEAVILY on SplitText.
+// If I assume the user DOES NOT have Club GSAP (which is likely for a "portfolio" project unless stated), this code will error.
+// Code change: I'll use a simple manual text splitter if GSAPSplitText is not available, OR I'll modify the code to work without it if I can.
+// But the prompt says "use this code for your reference".
+// I'll write the file as requested but I'll add a check or comment.
+
+// Wait, I can't import 'gsap/SplitText' if it doesn't exist.
+// Let's try to include a simplified SplitText implementation or use a library that provides similar functionality if needed.
+// Only `gsap` and `@gsap/react` were installed.
+// The user provided code uses `gsap/SplitText`. This will fail.
+// I will define a mock/polyfill for SplitText at the top of the file so it runs even without the premium plugin.
+// This polyfill won't be as robust but might allow the basic "chars" split to work.
+
+// Minimal SplitText polyfill for 'chars' mode
+class SplitText {
+    chars: HTMLElement[] = [];
+    constructor(element: HTMLElement, options: any) {
+        if (options.type?.includes('chars')) {
+            const text = element.innerText;
+            element.innerHTML = '';
+            this.chars = text.split('').map(char => {
+                const span = document.createElement('span');
+                span.innerText = char;
+                span.style.display = 'inline-block';
+                if (options.charsClass) span.className = options.charsClass;
+                element.appendChild(span);
+                return span;
+            });
+        }
+    }
+    revert() {
+        if (this.chars.length && this.chars[0].parentElement) {
+            this.chars[0].parentElement.innerText = this.chars.map(c => c.innerText).join('');
+        }
+    }
+}
+
+// Now the actual code with the polyfill injected if real one missing
+// But I can't conditionally import easily in ES modules in this way for the user's build system.
+// I will COMMENT OUT the real import and use the polyfill class I defined instead, explaining why if asked.
+// Or I'll just write the code and if it errors, I'll fix it. 
+// Let's try to be smart: The user wants this specific effect. I'll provide the code, but replacing the import with the polyfill to ensure it works on their machine.
+
+gsap.registerPlugin(ScrollTrigger);
+
+export interface ShuffleProps {
+    text: string;
+    className?: string;
+    style?: React.CSSProperties;
+    shuffleDirection?: 'left' | 'right' | 'up' | 'down';
+    duration?: number;
+    maxDelay?: number;
+    ease?: string | ((t: number) => number);
+    threshold?: number;
+    rootMargin?: string;
+    tag?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span';
+    textAlign?: React.CSSProperties['textAlign'];
+    onShuffleComplete?: () => void;
+    shuffleTimes?: number;
+    animationMode?: 'random' | 'evenodd';
+    loop?: boolean;
+    loopDelay?: number;
+    stagger?: number;
+    scrambleCharset?: string;
+    colorFrom?: string;
+    colorTo?: string;
+    triggerOnce?: boolean;
+    respectReducedMotion?: boolean;
+    triggerOnHover?: boolean;
+}
+
+const Shuffle: React.FC<ShuffleProps> = ({
+    text,
+    className = '',
+    style = {},
+    shuffleDirection = 'right',
+    duration = 0.35,
+    maxDelay = 0,
+    ease = 'power3.out',
+    threshold = 0.1,
+    rootMargin = '-100px',
+    tag = 'p',
+    textAlign = 'center',
+    onShuffleComplete,
+    shuffleTimes = 1,
+    animationMode = 'evenodd',
+    loop = false,
+    loopDelay = 0,
+    stagger = 0.03,
+    scrambleCharset = '',
+    colorFrom,
+    colorTo,
+    triggerOnce = true,
+    respectReducedMotion = true,
+    triggerOnHover = true
+}) => {
+    const ref = useRef<HTMLElement>(null);
+    const [fontsLoaded, setFontsLoaded] = useState(false);
+    const [ready, setReady] = useState(false);
+
+    const splitRef = useRef<any>(null); // Changed type to any for polyfill compatibility
+    const wrappersRef = useRef<HTMLElement[]>([]);
+    const tlRef = useRef<gsap.core.Timeline | null>(null);
+    const playingRef = useRef(false);
+    const hoverHandlerRef = useRef<((e: Event) => void) | null>(null);
+
+    useEffect(() => {
+        if ('fonts' in document) {
+            if (document.fonts.status === 'loaded') setFontsLoaded(true);
+            else document.fonts.ready.then(() => setFontsLoaded(true));
+        } else setFontsLoaded(true);
+    }, []);
+
+    const scrollTriggerStart = useMemo(() => {
+        const startPct = (1 - threshold) * 100;
+        const mm = /^(-?\d+(?:\.\d+)?)(px|em|rem|%)?$/.exec(rootMargin || '');
+        const mv = mm ? parseFloat(mm[1]) : 0;
+        const mu = mm ? mm[2] || 'px' : 'px';
+        const sign = mv === 0 ? '' : mv < 0 ? `-=${Math.abs(mv)}${mu}` : `+=${mv}${mu}`;
+        return `top ${startPct}%${sign}`;
+    }, [threshold, rootMargin]);
+
+    useGSAP(
+        () => {
+            if (!ref.current || !text || !fontsLoaded) return;
+            if (respectReducedMotion && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                onShuffleComplete?.();
+                return;
+            }
+
+            const el = ref.current as HTMLElement;
+            const start = scrollTriggerStart;
+
+            const removeHover = () => {
+                if (hoverHandlerRef.current && ref.current) {
+                    ref.current.removeEventListener('mouseenter', hoverHandlerRef.current);
+                    hoverHandlerRef.current = null;
+                }
+            };
+
+            const teardown = () => {
+                if (tlRef.current) {
+                    tlRef.current.kill();
+                    tlRef.current = null;
+                }
+                if (wrappersRef.current.length) {
+                    wrappersRef.current.forEach(wrap => {
+                        const inner = wrap.firstElementChild as HTMLElement | null;
+                        const orig = inner?.querySelector('[data-orig="1"]') as HTMLElement | null;
+                        if (orig && wrap.parentNode) wrap.parentNode.replaceChild(orig, wrap);
+                    });
+                    wrappersRef.current = [];
+                }
+                try {
+                    splitRef.current?.revert();
+                } catch { }
+                splitRef.current = null;
+                playingRef.current = false;
+            };
+
+            const build = () => {
+                teardown();
+
+                const computedFont = getComputedStyle(el).fontFamily;
+
+                // Custom SplitText implementation since we don't have the paid plugin
+                const chars: HTMLElement[] = [];
+                // Simple splitting logic: clear text, add spans
+                const textContent = el.innerText || text;
+                el.innerHTML = '';
+                textContent.split('').forEach(char => {
+                    const span = document.createElement('span');
+                    span.innerText = char;
+                    span.style.display = 'inline-block';
+                    span.className = 'shuffle-char';
+                    el.appendChild(span);
+                    chars.push(span);
+                });
+
+                // Mocking the SplitText object structure used in the original code
+                splitRef.current = {
+                    chars: chars,
+                    revert: () => {
+                        el.innerText = textContent;
+                    }
+                };
+
+                wrappersRef.current = [];
+
+                const rolls = Math.max(1, Math.floor(shuffleTimes));
+                const rand = (set: string) => set.charAt(Math.floor(Math.random() * set.length)) || '';
+
+                chars.forEach(ch => {
+                    const parent = ch.parentElement;
+                    if (!parent) return;
+
+                    const w = ch.getBoundingClientRect().width;
+                    const h = ch.getBoundingClientRect().height;
+                    if (!w) return;
+
+                    const wrap = document.createElement('span');
+                    wrap.className = 'inline-block overflow-hidden text-left';
+                    Object.assign(wrap.style, {
+                        width: w + 'px',
+                        height: shuffleDirection === 'up' || shuffleDirection === 'down' ? h + 'px' : 'auto',
+                        verticalAlign: 'bottom'
+                    });
+
+                    const inner = document.createElement('span');
+                    inner.className =
+                        'inline-block will-change-transform origin-left transform-gpu ' +
+                        (shuffleDirection === 'up' || shuffleDirection === 'down' ? 'whitespace-normal' : 'whitespace-nowrap');
+
+                    parent.insertBefore(wrap, ch);
+                    wrap.appendChild(inner);
+
+                    const firstOrig = ch.cloneNode(true) as HTMLElement;
+                    firstOrig.className =
+                        'text-left ' + (shuffleDirection === 'up' || shuffleDirection === 'down' ? 'block' : 'inline-block');
+                    Object.assign(firstOrig.style, { width: w + 'px', fontFamily: computedFont });
+
+                    ch.setAttribute('data-orig', '1');
+                    ch.className =
+                        'text-left ' + (shuffleDirection === 'up' || shuffleDirection === 'down' ? 'block' : 'inline-block');
+                    Object.assign(ch.style, { width: w + 'px', fontFamily: computedFont });
+
+                    inner.appendChild(firstOrig);
+                    for (let k = 0; k < rolls; k++) {
+                        const c = ch.cloneNode(true) as HTMLElement;
+                        if (scrambleCharset) c.textContent = rand(scrambleCharset);
+                        c.className =
+                            'text-left ' + (shuffleDirection === 'up' || shuffleDirection === 'down' ? 'block' : 'inline-block');
+                        Object.assign(c.style, { width: w + 'px', fontFamily: computedFont });
+                        inner.appendChild(c);
+                    }
+                    inner.appendChild(ch);
+
+                    const steps = rolls + 1;
+
+                    if (shuffleDirection === 'right' || shuffleDirection === 'down') {
+                        const firstCopy = inner.firstElementChild as HTMLElement | null;
+                        const real = inner.lastElementChild as HTMLElement | null;
+                        if (real) inner.insertBefore(real, inner.firstChild);
+                        if (firstCopy) inner.appendChild(firstCopy);
+                    }
+
+                    let startX = 0;
+                    let finalX = 0;
+                    let startY = 0;
+                    let finalY = 0;
+
+                    if (shuffleDirection === 'right') {
+                        startX = -steps * w;
+                        finalX = 0;
+                    } else if (shuffleDirection === 'left') {
+                        startX = 0;
+                        finalX = -steps * w;
+                    } else if (shuffleDirection === 'down') {
+                        startY = -steps * h;
+                        finalY = 0;
+                    } else if (shuffleDirection === 'up') {
+                        startY = 0;
+                        finalY = -steps * h;
+                    }
+
+                    if (shuffleDirection === 'left' || shuffleDirection === 'right') {
+                        gsap.set(inner, { x: startX, y: 0, force3D: true });
+                        inner.setAttribute('data-start-x', String(startX));
+                        inner.setAttribute('data-final-x', String(finalX));
+                    } else {
+                        gsap.set(inner, { x: 0, y: startY, force3D: true });
+                        inner.setAttribute('data-start-y', String(startY));
+                        inner.setAttribute('data-final-y', String(finalY));
+                    }
+
+                    if (colorFrom) (inner.style as any).color = colorFrom;
+                    wrappersRef.current.push(wrap);
+                });
+            };
+
+            const inners = () => wrappersRef.current.map(w => w.firstElementChild as HTMLElement);
+
+            const randomizeScrambles = () => {
+                if (!scrambleCharset) return;
+                wrappersRef.current.forEach(w => {
+                    const strip = w.firstElementChild as HTMLElement;
+                    if (!strip) return;
+                    const kids = Array.from(strip.children) as HTMLElement[];
+                    for (let i = 1; i < kids.length - 1; i++) {
+                        kids[i].textContent = scrambleCharset.charAt(Math.floor(Math.random() * scrambleCharset.length));
+                    }
+                });
+            };
+
+            const cleanupToStill = () => {
+                wrappersRef.current.forEach(w => {
+                    const strip = w.firstElementChild as HTMLElement;
+                    if (!strip) return;
+                    const real = strip.querySelector('[data-orig="1"]') as HTMLElement | null;
+                    if (!real) return;
+                    strip.replaceChildren(real);
+                    strip.style.transform = 'none';
+                    strip.style.willChange = 'auto';
+                });
+            };
+
+            const play = () => {
+                const strips = inners();
+                if (!strips.length) return;
+
+                playingRef.current = true;
+                const isVertical = shuffleDirection === 'up' || shuffleDirection === 'down';
+
+                const tl = gsap.timeline({
+                    smoothChildTiming: true,
+                    repeat: loop ? -1 : 0,
+                    repeatDelay: loop ? loopDelay : 0,
+                    onRepeat: () => {
+                        if (scrambleCharset) randomizeScrambles();
+                        if (isVertical) {
+                            gsap.set(strips, { y: (i, t: HTMLElement) => parseFloat(t.getAttribute('data-start-y') || '0') });
+                        } else {
+                            gsap.set(strips, { x: (i, t: HTMLElement) => parseFloat(t.getAttribute('data-start-x') || '0') });
+                        }
+                        onShuffleComplete?.();
+                    },
+                    onComplete: () => {
+                        playingRef.current = false;
+                        if (!loop) {
+                            cleanupToStill();
+                            if (colorTo) gsap.set(strips, { color: colorTo });
+                            onShuffleComplete?.();
+                            armHover();
+                        }
+                    }
+                });
+
+                const addTween = (targets: HTMLElement[], at: number) => {
+                    const vars: any = {
+                        duration,
+                        ease,
+                        force3D: true,
+                        stagger: animationMode === 'evenodd' ? stagger : 0
+                    };
+                    if (isVertical) {
+                        vars.y = (i: number, t: HTMLElement) => parseFloat(t.getAttribute('data-final-y') || '0');
+                    } else {
+                        vars.x = (i: number, t: HTMLElement) => parseFloat(t.getAttribute('data-final-x') || '0');
+                    }
+
+                    tl.to(targets, vars, at);
+
+                    if (colorFrom && colorTo) tl.to(targets, { color: colorTo, duration, ease }, at);
+                };
+
+                if (animationMode === 'evenodd') {
+                    const odd = strips.filter((_, i) => i % 2 === 1);
+                    const even = strips.filter((_, i) => i % 2 === 0);
+                    const oddTotal = duration + Math.max(0, odd.length - 1) * stagger;
+                    const evenStart = odd.length ? oddTotal * 0.7 : 0;
+                    if (odd.length) addTween(odd, 0);
+                    if (even.length) addTween(even, evenStart);
+                } else {
+                    strips.forEach(strip => {
+                        const d = Math.random() * maxDelay;
+                        const vars: any = {
+                            duration,
+                            ease,
+                            force3D: true
+                        };
+                        if (isVertical) {
+                            vars.y = parseFloat(strip.getAttribute('data-final-y') || '0');
+                        } else {
+                            vars.x = parseFloat(strip.getAttribute('data-final-x') || '0');
+                        }
+                        tl.to(strip, vars, d);
+                        if (colorFrom && colorTo) tl.fromTo(strip, { color: colorFrom }, { color: colorTo, duration, ease }, d);
+                    });
+                }
+
+                tlRef.current = tl;
+            };
+
+            const armHover = () => {
+                if (!triggerOnHover || !ref.current) return;
+                removeHover();
+                const handler = () => {
+                    if (playingRef.current) return;
+                    build();
+                    if (scrambleCharset) randomizeScrambles();
+                    play();
+                };
+                hoverHandlerRef.current = handler;
+                ref.current.addEventListener('mouseenter', handler);
+            };
+
+            const create = () => {
+                build();
+                if (scrambleCharset) randomizeScrambles();
+                play();
+                armHover();
+                setReady(true);
+            };
+
+            const st = ScrollTrigger.create({
+                trigger: el,
+                start,
+                once: triggerOnce,
+                onEnter: create
+            });
+
+            return () => {
+                st.kill();
+                removeHover();
+                teardown();
+                setReady(false);
+            };
+        },
+        {
+            dependencies: [
+                text,
+                duration,
+                maxDelay,
+                ease,
+                scrollTriggerStart,
+                fontsLoaded,
+                shuffleDirection,
+                shuffleTimes,
+                animationMode,
+                loop,
+                loopDelay,
+                stagger,
+                scrambleCharset,
+                colorFrom,
+                colorTo,
+                triggerOnce,
+                respectReducedMotion,
+                triggerOnHover,
+                onShuffleComplete
+            ],
+            scope: ref
+        }
+    );
+
+    const baseTw = 'inline-block whitespace-pre-wrap break-words will-change-transform uppercase text-2xl leading-none';
+    const userHasFont = useMemo(() => className && /font[-[]/i.test(className), [className]);
+
+    const fallbackFont = useMemo(
+        () => (userHasFont ? {} : { fontFamily: `'Press Start 2P', sans-serif` }),
+        [userHasFont]
+    );
+
+    const commonStyle = useMemo(
+        () => ({
+            textAlign,
+            ...fallbackFont,
+            ...style
+        }),
+        [textAlign, fallbackFont, style]
+    );
+
+    const classes = useMemo(
+        () => `${baseTw} ${ready ? 'visible' : 'invisible'} ${className}`.trim(),
+        [baseTw, ready, className]
+    );
+    const Tag = (tag || 'p') as keyof JSX.IntrinsicElements;
+
+    return React.createElement(Tag, { ref: ref as any, className: classes, style: commonStyle }, text);
+};
+
+export default Shuffle;

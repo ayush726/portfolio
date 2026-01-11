@@ -40,7 +40,7 @@ const BlogPost = () => {
         <link rel="canonical" href={url} />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       </Helmet>
-      <main className="container mx-auto py-12">
+      <main className="container mx-auto py-12 relative z-10">
         <div className="mb-8 flex justify-center">
           <div className="w-full md:max-w-3xl">
             <SpotifyBanner title="deja vu — Olivia Rodrigo" />

@@ -63,7 +63,7 @@ const Journey = () => {
         <link rel="canonical" href={`${siteConfig.baseUrl}/journey`} />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       </Helmet>
-      <main className="container mx-auto min-h-[calc(100svh-88px)] py-12">
+      <main className="container mx-auto min-h-[calc(100svh-88px)] py-12 relative z-10">
         <motion.section
           initial={{ opacity: 0, rotateX: 8, y: 12 }}
           animate={{ opacity: 1, rotateX: 0, y: 0 }}

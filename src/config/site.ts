@@ -18,7 +18,7 @@ const loadBlogs = (): Blog[] => {
 
 export const siteConfig = {
   baseUrl: "",
-  name: "Ayush Keshri",
+  name: "Ayush  Keshri",
   bio:
     "an enthusiastic explorer who blends curiosity, creativity, and technology to turn ideas into reality. From diving deep into tech to experimenting with new skills, I enjoy building things, learning along the way, and collaborating with people who share the drive to create something meaningful.",
     

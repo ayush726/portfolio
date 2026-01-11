@@ -7,11 +7,14 @@ import { AnimatePresence } from "framer-motion";
 import { HelmetProvider } from "react-helmet-async";
 import { ThemeProvider } from "next-themes";
 import Header from "./components/Header";
+import BackgroundDistortion from "./components/BackgroundDistortion";
+import ClickSpark from "./components/ClickSpark";
 import Home from "./pages/Home";
 import Blogs from "./pages/Blogs";
 import BlogPost from "./pages/BlogPost";
 import NotFound from "./pages/NotFound";
 import Journey from "./pages/Journey";
+
 const queryClient = new QueryClient();
 
 const RouterView = () => {
@@ -35,16 +38,26 @@ const App = () => (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
         <TooltipProvider>
+          <BackgroundDistortion />
           <Toaster />
           <Sonner />
           <BrowserRouter>
-            <Header />
-            <RouterView />
+            <ClickSpark
+              sparkColor="#fff"
+              sparkSize={10}
+              sparkRadius={15}
+              sparkCount={8}
+              duration={400}
+            >
+              <Header />
+              <RouterView />
+            </ClickSpark>
           </BrowserRouter>
         </TooltipProvider>
       </ThemeProvider>
     </QueryClientProvider>
   </HelmetProvider>
 );
+
 
 export default App;

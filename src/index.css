@@ -8,32 +8,32 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 96%;
+    --background: 210 50% 95%;
     --foreground: 222.2 84% 4.9%;
 
-    --card: 0 0% 98%;
+    --card: 210 45% 92%;
     --card-foreground: 222.2 84% 4.9%;
 
-    --popover: 0 0% 98%;
+    --popover: 210 45% 92%;
     --popover-foreground: 222.2 84% 4.9%;
 
     --primary: 222.2 47.4% 11.2%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 210 40% 93%;
+    --secondary: 210 40% 90%;
     --secondary-foreground: 222.2 47.4% 11.2%;
 
-    --muted: 210 40% 93%;
+    --muted: 210 40% 90%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 210 40% 93%;
+    --accent: 210 40% 90%;
     --accent-foreground: 222.2 47.4% 11.2%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 88%;
-    --input: 214.3 31.8% 88%;
+    --border: 214.3 35% 85%;
+    --input: 214.3 35% 85%;
     --ring: 222.2 84% 4.9%;
 
     --radius: 0.5rem;
@@ -41,7 +41,7 @@ All colors MUST be HSL.
     /* Smooth theme switching */
     --theme-transition-duration: 220ms;
 
-    --sidebar-background: 0 0% 96%;
+    --sidebar-background: 210 50% 95%;
 
     --sidebar-foreground: 240 5.3% 26.1%;
 
@@ -49,59 +49,59 @@ All colors MUST be HSL.
 
     --sidebar-primary-foreground: 0 0% 98%;
 
-    --sidebar-accent: 240 4.8% 93%;
+    --sidebar-accent: 210 40% 90%;
 
     --sidebar-accent-foreground: 240 5.9% 10%;
 
-    --sidebar-border: 220 13% 88%;
+    --sidebar-border: 214.3 35% 85%;
 
     --sidebar-ring: 217.2 91.2% 59.8%;
 
-    /* Background gradient stops for subtle depth in light mode */
-    --background-start: 0 0% 95%;
-    --background-end: 0 0% 96%;
+    /* Background gradient stops for light blue mode */
+    --background-start: 210 50% 94%;
+    --background-end: 210 45% 96%;
   }
 
   .dark {
-    --background: 0 0% 9%;
+    --background: 220 60% 15%;
     --foreground: 210 40% 98%;
 
-    --card: 0 0% 10%;
+    --card: 220 55% 20%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 0 0% 10%;
+    --popover: 220 55% 20%;
     --popover-foreground: 210 40% 98%;
 
     --primary: 210 40% 98%;
     --primary-foreground: 222.2 47.4% 11.2%;
 
-    --secondary: 0 0% 14%;
+    --secondary: 220 50% 25%;
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 0 0% 14%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 220 50% 25%;
+    --muted-foreground: 215 20.2% 75%;
 
-    --accent: 0 0% 14%;
+    --accent: 220 50% 25%;
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 0 0% 14%;
-    --input: 0 0% 14%;
+    --border: 220 45% 30%;
+    --input: 220 45% 30%;
     --ring: 210 40% 98%;
-    --sidebar-background: 0 0% 9%;
+    --sidebar-background: 220 60% 15%;
     --sidebar-foreground: 210 40% 98%;
     --sidebar-primary: 224.3 76.3% 48%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 0 0% 14%;
+    --sidebar-accent: 220 50% 25%;
     --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 0 0% 14%;
+    --sidebar-border: 220 45% 30%;
     --sidebar-ring: 217.2 91.2% 59.8%;
 
-    /* Background gradient stops for subtle depth */
-    --background-start: 0 0% 7.5%;
-    --background-end: 0 0% 9.5%;
+    /* Background gradient stops for dark blue mode */
+    --background-start: 220 60% 14%;
+    --background-end: 215 50% 16%;
   }
 }
 
@@ -113,12 +113,6 @@ All colors MUST be HSL.
   body {
     @apply bg-background text-foreground font-mono antialiased;
     background-color: hsl(var(--background));
-    background-image:
-      radial-gradient(hsl(var(--foreground) / 0.035) 1px, transparent 1px),
-      radial-gradient(hsl(var(--foreground) / 0.02) 1px, transparent 1px),
-      linear-gradient(180deg, hsl(var(--background-start)), hsl(var(--background-end)));
-    background-size: 3px 3px, 7px 7px, 100% 100%;
-    background-position: 0 0, 10px 5px, 0 0;
   }
 }
 
