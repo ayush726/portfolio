@@ -18,6 +18,7 @@ This project is built using the following technologies:
 - **3D Graphics:** [Three.js](https://threejs.org/) / [React Three Fiber](https://docs.pmnd.rs/react-three-fiber)
 - **Forms:** [React Hook Form](https://react-hook-form.com/) + [Zod](https://zod.dev/)
 - **State Management:** [TanStack Query](https://tanstack.com/query/latest)
+- **Deployment:** [Vercel](https://vercel.com)
 
 ## 🛠️ Getting Started
 
