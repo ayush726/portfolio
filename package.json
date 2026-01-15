@@ -1,5 +1,21 @@
 {
-  "name": "vite_react_shadcn_ts",
+  "name": "ayush-keshri-portfolio",
+  "description": "Personal portfolio website showcasing projects, skills, and experiences with modern web technologies including React, TypeScript, GSAP, and Three.js",
+  "author": "Ayush Keshri <https://github.com/ayush726>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ayush726/portfolio.git"
+  },
+  "keywords": [
+    "portfolio",
+    "react",
+    "typescript",
+    "vite",
+    "tailwindcss",
+    "gsap",
+    "threejs",
+    "shadcn-ui"
+  ],
   "private": true,
   "version": "0.0.0",
   "type": "module",

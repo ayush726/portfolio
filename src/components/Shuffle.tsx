@@ -1,48 +1,36 @@
+/**
+ * Shuffle Text Component
+ * 
+ * A highly customizable text animation component that creates a shuffle/scramble effect
+ * using GSAP animations. Text characters slide in from different directions with staggered timing.
+ * 
+ * @component
+ * @example
+ * ```tsx
+ * <Shuffle
+ *   text="Hello World"
+ *   shuffleDirection="right"
+ *   duration={0.35}
+ *   shuffleTimes={3}
+ *   triggerOnHover={true}
+ * />
+ * ```
+ * 
+ * Note: This component uses a custom SplitText implementation since GSAP's SplitText
+ * is a premium Club GSAP plugin. The custom implementation provides similar functionality
+ * for character-level text splitting and animation.
+ */
+
 import React, { useRef, useEffect, useState, useMemo } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-// import { SplitText as GSAPSplitText } from 'gsap/SplitText'; // NOTE: SplitText is a Club GSAP plugin (paid). We'll try to use a basic split approach or check if user has access. 
-// Assuming user might NOT have the paid SplitText plugin, functionality might break. 
-// However, the provided code explicitly imports it. If the user provided this code, they might expect it to work or have the file.
-// Wait, standard GSAP package does not include SplitText. It's a premium plugin.
-// Using the code as provided by the user. If it fails due to missing SplitText, I might need to mock it or ask for clarification.
-// For now, I will comment out the import if I can't find it, or use a workaround? 
-// Actually, let's paste the code exactly as requested. But wait, 'gsap/SplitText' won't work without the premium package installation or file.
-// If the user pasted this code, they likely copied it from somewhere like ReactBits.
-// Steps:
-// 1. Create file.
-// 2. Note that SplitText is premium. The user might get an error if they don't have the club gsap package installed/configured.
-// I will proceed with writing the file. If build fails, I'll let the user know.
-
-// Re-reading the user prompt code...
-// "import { SplitText as GSAPSplitText } from 'gsap/SplitText';"
-// This line definitely requires Club GSAP. 
-
-// Workaround: I can't easily "mock" SplitText behavior for shuffle effect perfectly without a library or complex code.
-// However, I will implement exactly what the user asked for first.
-
 import { useGSAP } from '@gsap/react';
 import { JSX } from 'react';
 
-// NOTE: SplitText is a premium plugin. If this import fails, the component will break.
-// I'll assume the environment might have it or I should try to simulate it if possible? 
-// No, I should stick to the user's request. But standard `npm install gsap` DOES NOT include SplitText.
-// This is a common pitfall. The user provided code from a specific library (ReactBits) which often relies on premium plugins or specific implementations.
-// Let's modify the code slightly to NOT crash if SplitText is missing, or try to use a basic split if possible?
-// Actually, looking at the code, it relies HEAVILY on SplitText.
-// If I assume the user DOES NOT have Club GSAP (which is likely for a "portfolio" project unless stated), this code will error.
-// Code change: I'll use a simple manual text splitter if GSAPSplitText is not available, OR I'll modify the code to work without it if I can.
-// But the prompt says "use this code for your reference".
-// I'll write the file as requested but I'll add a check or comment.
-
-// Wait, I can't import 'gsap/SplitText' if it doesn't exist.
-// Let's try to include a simplified SplitText implementation or use a library that provides similar functionality if needed.
-// Only `gsap` and `@gsap/react` were installed.
-// The user provided code uses `gsap/SplitText`. This will fail.
-// I will define a mock/polyfill for SplitText at the top of the file so it runs even without the premium plugin.
-// This polyfill won't be as robust but might allow the basic "chars" split to work.
-
-// Minimal SplitText polyfill for 'chars' mode
+/**
+ * Custom SplitText implementation
+ * Provides basic character splitting functionality as an alternative to GSAP's premium SplitText plugin
+ */
 class SplitText {
     chars: HTMLElement[] = [];
     constructor(element: HTMLElement, options: any) {

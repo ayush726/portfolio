@@ -4,6 +4,23 @@ A personal portfolio website showcasing my projects, skills, and experiences, bu
 
 ![Portfolio Preview](./public/og-image.png)
 
+## 🔗 Live Demo
+
+Visit the live portfolio: [ayush726.github.io/portfolio](https://ayush726.github.io/portfolio)
+
+## ✨ Features
+
+- **Interactive Shuffle Text Effect** - Custom GSAP-powered text animations with shuffle effects
+- **3D Model Viewer** - Interactive 3D card model on the homepage using model-viewer
+- **Background Distortion** - Dynamic grid distortion effects that respond to mouse movement
+- **Rotating Text** - Smooth text rotation animations using Framer Motion
+- **Dark/Light Theme** - Seamless theme switching with next-themes
+- **Responsive Design** - Fully responsive layout optimized for all devices
+- **Blog System** - Dynamic blog loading from JSON files
+- **Journey Timeline** - Visual representation of career and educational milestones
+- **Performance Optimized** - Built with Vite for lightning-fast load times
+- **Accessibility First** - Semantic HTML and ARIA labels for better accessibility
+
 ## 🚀 Tech Stack
 
 This project is built using the following technologies:

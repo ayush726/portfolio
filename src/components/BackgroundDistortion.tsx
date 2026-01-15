@@ -1,3 +1,23 @@
+/**
+ * BackgroundDistortion Component
+ * 
+ * Creates a dynamic, theme-aware background with grid distortion effects.
+ * Generates gradients using HTML5 Canvas API and applies distortion effects
+ * that respond to mouse movement.
+ * 
+ * @component
+ * @example
+ * ```tsx
+ * <BackgroundDistortion />
+ * ```
+ * 
+ * Features:
+ * - Theme-aware gradients (dark blue for dark mode, grey for light mode)
+ * - Canvas-based gradient generation for performance
+ * - Mouse-responsive distortion effects
+ * - Automatically updates when theme changes
+ */
+
 import { useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
 import GridDistortion from './GridDistortion';
