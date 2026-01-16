@@ -33,7 +33,7 @@ import { JSX } from 'react';
  */
 class SplitText {
     chars: HTMLElement[] = [];
-    constructor(element: HTMLElement, options: any) {
+    constructor(element: HTMLElement, options: { type?: string; charsClass?: string }) {
         if (options.type?.includes('chars')) {
             const text = element.innerText;
             element.innerHTML = '';
@@ -117,7 +117,7 @@ const Shuffle: React.FC<ShuffleProps> = ({
     const [fontsLoaded, setFontsLoaded] = useState(false);
     const [ready, setReady] = useState(false);
 
-    const splitRef = useRef<any>(null); // Changed type to any for polyfill compatibility
+    const splitRef = useRef<{ chars: HTMLElement[]; revert: () => void } | null>(null);
     const wrappersRef = useRef<HTMLElement[]>([]);
     const tlRef = useRef<gsap.core.Timeline | null>(null);
     const playingRef = useRef(false);
@@ -292,7 +292,7 @@ const Shuffle: React.FC<ShuffleProps> = ({
                         inner.setAttribute('data-final-y', String(finalY));
                     }
 
-                    if (colorFrom) (inner.style as any).color = colorFrom;
+                    if (colorFrom) inner.style.color = colorFrom;
                     wrappersRef.current.push(wrap);
                 });
             };
@@ -355,7 +355,7 @@ const Shuffle: React.FC<ShuffleProps> = ({
                 });
 
                 const addTween = (targets: HTMLElement[], at: number) => {
-                    const vars: any = {
+                    const vars: gsap.TweenVars = {
                         duration,
                         ease,
                         force3D: true,
@@ -382,7 +382,7 @@ const Shuffle: React.FC<ShuffleProps> = ({
                 } else {
                     strips.forEach(strip => {
                         const d = Math.random() * maxDelay;
-                        const vars: any = {
+                        const vars: gsap.TweenVars = {
                             duration,
                             ease,
                             force3D: true
@@ -484,7 +484,7 @@ const Shuffle: React.FC<ShuffleProps> = ({
     );
     const Tag = (tag || 'p') as keyof JSX.IntrinsicElements;
 
-    return React.createElement(Tag, { ref: ref as any, className: classes, style: commonStyle }, text);
+    return React.createElement(Tag, { ref: ref as React.RefObject<HTMLElement>, className: classes, style: commonStyle }, text);
 };
 
 export default Shuffle;

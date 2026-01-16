@@ -14,6 +14,8 @@ import Blogs from "./pages/Blogs";
 import BlogPost from "./pages/BlogPost";
 import NotFound from "./pages/NotFound";
 import Journey from "./pages/Journey";
+import FuzzyOverlay from "./components/FuzzyOverlay";
+import CustomCursor from "./components/CustomCursor";
 
 const queryClient = new QueryClient();
 
@@ -49,6 +51,8 @@ const App = () => (
               sparkCount={8}
               duration={400}
             >
+              <FuzzyOverlay />
+              <CustomCursor />
               <Header />
               <RouterView />
             </ClickSpark>

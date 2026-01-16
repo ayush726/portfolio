@@ -1,5 +1,5 @@
 import type { Config } from "tailwindcss";
-import tailwindgw from "tailwindcss-animate";
+import tailwindAnimate from "tailwindcss-animate";
 
 export default {
 	darkMode: ["class"],
@@ -104,6 +104,23 @@ export default {
 				'slide-out-right': {
 					'0%': { transform: 'translateX(0)' },
 					'100%': { transform: 'translateX(100%)' }
+				},
+				'noise': {
+					'0%': { transform: 'translate(0,0)' },
+					'10%': { transform: 'translate(-5%,-5%)' },
+					'20%': { transform: 'translate(-10%,5%)' },
+					'30%': { transform: 'translate(5%,-10%)' },
+					'40%': { transform: 'translate(-5%,15%)' },
+					'50%': { transform: 'translate(-10%,5%)' },
+					'60%': { transform: 'translate(15%,0)' },
+					'70%': { transform: 'translate(0,10%)' },
+					'80%': { transform: 'translate(-15%,0)' },
+					'90%': { transform: 'translate(10%,5%)' },
+					'100%': { transform: 'translate(5%,0)' }
+				},
+				'noise-pulse': {
+					'0%, 100%': { opacity: '0.03' },
+					'50%': { opacity: '0.07' }
 				}
 			},
 			animation: {
@@ -116,9 +133,11 @@ export default {
 				'slide-in-right': 'slide-in-right 0.3s ease-out',
 				'slide-out-right': 'slide-out-right 0.3s ease-out',
 				'enter': 'fade-in 0.3s ease-out, scale-in 0.2s ease-out',
-				'exit': 'fade-out 0.3s ease-out, scale-out 0.2s ease-out'
+				'exit': 'fade-out 0.3s ease-out, scale-out 0.2s ease-out',
+				'noise': 'noise 0.2s infinite alternate',
+				'noise-pulse': 'noise-pulse 2s infinite ease-in-out'
 			}
 		}
 	},
-	plugins: [tailwindgw],
+	plugins: [tailwindAnimate],
 } satisfies Config;

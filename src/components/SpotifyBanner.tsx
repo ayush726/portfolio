@@ -7,7 +7,6 @@ type SpotifyBannerProps = {
 
 const DEFAULT_SRC =
   "https://open.spotify.com/embed/track/6HU7h9RYOaPRFeh0R3UeAr?utm_source=generator&theme=0"; // deja vu — Olivia Rodrigo
-  "https://open.spotify.com/track/0FTmksd2dxiE5e3rWyJXs6";
 
 const SpotifyBanner: React.FC<SpotifyBannerProps> = ({ src = DEFAULT_SRC, title = "Spotify embed" }) => {
   return (
